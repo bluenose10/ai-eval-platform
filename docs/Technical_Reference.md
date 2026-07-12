@@ -148,4 +148,5 @@ Scores vary by document type. Shorter, denser documents tend to favour smaller c
 | 9. Observability | Full-stack tracing via Langfuse parent-child spans + OpenTelemetry |
 | 10. Portfolio Polish | Architecture diagram, case studies, pricing verification, HNSW verification |
 | 11. Deployment Bridge | Public API key system, `/api/public/chat` endpoint, auto-winner promotion, document search |
-| 12. Semantic Caching | 📋 DEFERRED — vector-based FAQ matching to reduce OpenAI costs at scale |
+| 12. Semantic Caching | ✅ COMPLETE — vector similarity cache (0.95 threshold), 7-day TTL, `match_semantic_cache` RPC, reduces redundant OpenAI costs on repeat questions |
+| 13. Audit Trail | ✅ COMPLETE — `public_interaction_logs` table, CSV export, 90-day purge (GDPR), pagination/search/date-filter and "clear expired cache" button built (pending push to production) |

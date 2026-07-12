@@ -78,7 +78,7 @@ User-facing retrieval routes are locked with RLS to prevent horizontal data expo
 
 ---
 
-## 7. The 11-Phase Roadmap and Current Project Status
+## 7. The 13-Phase Roadmap and Current Project Status
 
 | # | Phase | Status |
 |---|---|---|
@@ -93,7 +93,8 @@ User-facing retrieval routes are locked with RLS to prevent horizontal data expo
 | 9 | Observability — Full-stack tracing via hierarchical parent-child spans in Langfuse + OpenTelemetry | ✅ COMPLETE |
 | 10 | Portfolio Polish — Architecture diagram, case studies, pricing verification, HNSW index verification | ✅ COMPLETE |
 | 11 | Deployment Bridge — Public API key system, `/api/public/chat` endpoint, auto-winner config promotion, document search | ✅ COMPLETE |
-| 12 | Semantic Caching | 📋 DEFERRED |
+| 12 | Semantic Caching — vector similarity cache (0.95 threshold), 7-day TTL, `match_semantic_cache` RPC | ✅ COMPLETE |
+| 13 | Audit Trail — `public_interaction_logs` table, CSV export, 90-day purge, cache maintenance | ✅ COMPLETE (v2 UI improvements pending push) |
 
 ---
 

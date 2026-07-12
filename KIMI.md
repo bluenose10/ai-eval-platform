@@ -36,6 +36,12 @@ To maintain production-grade integrity and prevent system regressions, you must 
 
 - **document_chunks Schema:** The actual columns are: `id`, `document_id`, `user_id`, `content`, `chunk_index`, `token_count`, `embedding`, `created_at`. There is NO `metadata` column on this table. Do not reference `dc.metadata` in any RPC or query.
 
+- **Semantic Cache (Phase 12):** The `semantic_cache` table stores prior question/answer pairs keyed by embedding similarity. `match_semantic_cache(query_embedding, match_threshold, match_user_id)` returns the single best match above a **0.95 similarity threshold**. Entries carry a 7-day `expires_at` and are excluded from matches once expired (`WHERE expires_at > now()`) but are **not auto-deleted** — expired rows must be purged separately (see Audit Trail below). Do not lower the 0.95 threshold without explicit instruction; it exists to prevent near-miss questions from returning a wrong cached answer.
+
+- **Audit Trail (Phase 13):** Every `/api/public/chat` call — cache hit or fresh RAG answer — is logged fire-and-forget to `public_interaction_logs` (`id`, `user_id`, `question`, `answer`, `sources jsonb`, `cached boolean`, `created_at`) after the response is sent, so logging must never block or delay the client response. The dashboard's Audit Trail page reads this table (pagination, date-range filter, keyword search) and exposes two maintenance actions: **Purge logs older than 90 days** (GDPR) and **Clear expired semantic cache** (deletes `semantic_cache` rows where `expires_at < now()`). Do not merge or conflate these two purge operations — they target different tables with different retention rules.
+
+- **Client Provisioning:** Each client is a fully isolated clone — own GitHub repo, own Supabase project, own Vercel deployment. There is no shared multi-tenant infrastructure. Any bug fix discovered while working on a client clone must be pushed back to the canonical `ai-eval-platform` repo, not just the client repo, or it will resurface on the next clone. See `CLIENT_ONBOARDING.md` for the full step-by-step provisioning checklist, including the `.gitignore` leading-dot check and the `.maybeSingle()` / `name`-field fix in `deploy/page.tsx` — both are recurring failure modes if skipped.
+
 ---
 
 ## ⚠️ Instruction to Kimi
