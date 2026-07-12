@@ -58,7 +58,7 @@ Clients connect their website or CRM to EvalLab via a single public API key stor
 
 ## 4. Current Phase Status
 
-Phases 1–11 are complete. The platform is production-deployed on Vercel.
+All 13 phases are complete. The platform is production-deployed on Vercel.
 
 | Phase | Name | Status |
 |---|---|---|
@@ -73,6 +73,7 @@ Phases 1–11 are complete. The platform is production-deployed on Vercel.
 | 9 | Observability & Tracing | ✅ COMPLETE |
 | 10 | Portfolio Polish & Cost Mapping | ✅ COMPLETE |
 | 11 | Deployment Bridge & Public API | ✅ COMPLETE |
-| 12 | Semantic Caching | 📋 DEFERRED |
+| 12 | Semantic Caching — vector similarity cache, 0.95 threshold, 7-day TTL | ✅ COMPLETE |
+| 13 | Audit Trail — permanent interaction log, CSV export, 90-day purge, cache maintenance | ✅ COMPLETE |
 
 > **Technical status, phase progress, environment credentials, execution guardrails, and session handoff notes are maintained in [CLAUDE.md](../../CLAUDE.md).**

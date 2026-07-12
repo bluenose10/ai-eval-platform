@@ -3,6 +3,33 @@
 --- 
 
 
+## 0k. Session Handoff — 2026-07-12 (First Trial Client Live — fionnuala-evallab, Retrieval Bug Fixes, Doc Sync)
+
+### COMPLETED THIS SESSION
+
+- **First real trial client provisioned and live:** fionnuala-evallab, a free trial for an AI/org-transformation consultant found via LinkedIn. Full clone-to-live-URL flow completed following CLIENT_ONBOARDING.md — canonical repo verified healthy first (Step 0), cloned, setup-client.ps1 run cleanly, .env.local confirmed git-ignored, GitHub repo created, Supabase project + schema.sql run, client Auth user created, deployed to Vercel, API key generated.
+
+- **New bug found and fixed — dead `filter_document_id` parameter:** both `/api/chat/route.ts` and `/api/retrieve/route.ts` conditionally added `rpcParams.filter_document_id = documentId` whenever a user scoped QA Lab to a single document, but `match_document_chunks` has never had that parameter (only `filter_user_id` and `filter_chunk_size`). Caused a hard retrieval failure ("Could not find the function...") any time a specific document was selected instead of "All Documents". Fixed by removing the dead block in both routes — retrieval now always searches across all of a user's documents. Fixed in fionnuala-evallab first, then pushed to canonical `ai-eval-platform` so it won't recur on the next clone. If single-document scoping is wanted as a real feature later, `match_document_chunks` itself needs a new parameter — not done, out of scope for this session.
+
+- **`.maybeSingle()` fixes applied to `/api/public/chat/route.ts`:** two lookups (API key verification, auto-winner config lookup) were using `.single()`, which throws on the very common zero-row case (bad API key; brand-new client with <3 experiment runs). Both already had fallback logic that expected the zero-row case, so `.single()` was just generating log noise, not a security issue. Both changed to `.maybeSingle()` with the real-error vs. not-found cases split apart properly. Verified fixed in canonical `ai-eval-platform`; verify it is also committed and pushed in fionnuala-evallab before the next client clone.
+
+- **Card component styling — permanent green border added:** `src/components/ui/card.tsx` previously used a plain `border` class pulling from the near-invisible `--border` CSS variable. A `.card` hover-glow class existed in `globals.css` from an earlier session but was never actually wired to the Card component, so it did nothing. Rather than fix the unused hover class, added `border-primary/30` directly to the Card component's base classes for a permanent, theme-consistent green border across every card in the dashboard (Overview, Experiments, QA Lab, Audit Trail, Deploy all inherit this from one shared file). Pushed to both canonical and fionnuala-evallab.
+
+- **Documentation sync:** AI_Knowledge_Base_Playbook.md, EXECUTIVE_REPORT.md, and Technical_Reference.md were all still showing Phase 12 as "DEFERRED" and had no mention of Phase 13 at all, despite both phases being complete since the prior session. All three corrected to show Phases 12 (Semantic Caching) and 13 (Audit Trail) as complete. KIMI.md was missing guardrails for semantic cache behaviour, audit trail logging, and client provisioning isolation — all three added.
+
+- **Client-facing materials created:** a two-page Quick Start Guide (login → upload → QA Lab → Experiments → Observability → Audit Trail → Deploy, explained in plain non-technical language) and a separate Access Details document (login URL/credentials, test chatbot site, Q&A demo site). Both explicitly clarify that Audit Trail only logs the public/website chatbot, never internal QA Lab activity — this caused confusion mid-session when the Audit Trail page showed zero interactions despite active QA Lab testing (expected behaviour, not a bug).
+
+### CURRENT TRUTH (authoritative as of 2026-07-12)
+
+- **fionnuala-evallab is live and has been handed to the client** with access details and a quick start guide. Awaiting her feedback — first real external usage of the platform outside of Mark's own testing.
+- **Both retrieval bugs (dead `filter_document_id` param, `.single()` vs `.maybeSingle()`) are fixed in canonical `ai-eval-platform`.** Confirm both are also pushed in fionnuala-evallab specifically before treating her clone as fully patched.
+- **Observability tab is slow to load by design, not a bug:** `force-dynamic` rendering means every page load does a live round-trip to Langfuse to check connection status, rather than showing cached data. Confirmed present on both the canonical repo and fionnuala-evallab, so it's not clone-specific. Not fixed this session — candidate future improvements: loading skeleton, short-lived cache on the Langfuse status check, or moving the fetch off the critical render path.
+- **Still outstanding from prior sessions, unchanged:** Cursor AI full security audit before treating any client as a paying (non-trial) customer; renaming "Faithfulness" to "Truth Score" in the UI (display label only).
+- **Possible future direction, not yet decided:** solicitors/law firms identified as a promising vertical (case law and document research use case) — may warrant splitting into a research-focused dashboard product versus a website-chatbot product, but this is speculative pending actual feedback from the Fionnuala trial. No repo split has been started.
+
+---
+
+
 ## 0j. Session Handoff — 2026-06-30 (First Two Real Client Clones — smithco-evallab & smithco-evallab2)
 
 ### COMPLETED THIS SESSION
